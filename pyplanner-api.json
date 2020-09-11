@@ -1,0 +1,596 @@
+{
+    "openapi": "3.0.0",
+    "servers": [
+        {
+            "url": "https://pyplanner.herokuapp.com/",
+            "description": "Heroku"
+        }
+    ],
+    "info": {
+        "description": "PyPlanner is a planner inspired by the SCRUM method of software development.",
+        "version": "1.0.0",
+        "title": "PyPlanner",
+        "termsOfService": "",
+        "contact": {
+            "email": "cameron.mcquinn@gmail.com",
+            "name": "Cameron McQuinn"
+        }
+    },
+    "tags": [
+        {
+            "name": "user",
+            "description": "User operations.",
+            "externalDocs": {
+                "description": "",
+                "url": "http://cmcquinn.github.io/pyplannerDjango"
+            }
+        }
+    ],
+    "paths": {
+        "/user": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Create user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "createUser",
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "description": "Created user object",
+                    "required": true
+                },
+                "parameters": []
+            }
+        },
+        "/user/createWithArray": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Creates list of users with given input array",
+                "description": "",
+                "operationId": "createUsersWithArrayInput",
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                },
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserArray"
+                },
+                "parameters": [],
+                "security": []
+            }
+        },
+        "/user/createWithList": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Creates list of users with given input array",
+                "description": "",
+                "operationId": "createUsersWithListInput",
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                },
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserArray"
+                },
+                "parameters": []
+            }
+        },
+        "/user/login": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Logs user into the system",
+                "description": "",
+                "operationId": "loginUser",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "The user name for login",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "The password for login in clear text",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "password"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {
+                            "X-Rate-Limit": {
+                                "description": "calls per hour allowed by the user",
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                }
+                            },
+                            "X-Expires-After": {
+                                "description": "date in UTC when token expires",
+                                "schema": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/xml": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid username/password supplied"
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Logs out current logged in user session",
+                "description": "",
+                "operationId": "logoutUser",
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                },
+                "parameters": []
+            }
+        },
+        "/user/{username}": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get user by user name",
+                "description": "",
+                "operationId": "getUserByName",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "The name that needs to be fetched. Use user1 for testing. ",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid username supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Updated user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "name that need to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid user supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "description": "Updated user object",
+                    "required": true
+                }
+            },
+            "delete": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Delete user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "The name that needs to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid username supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/task/{taskID}": {
+            "get": {
+                "tags": [
+                    "task"
+                ],
+                "summary": "Get task by ID",
+                "description": "",
+                "operationId": "getTaskByID",
+                "parameters": [
+                    {
+                        "name": "taskID",
+                        "in": "path",
+                        "description": "Identifier for the task to be retrieved.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "task"
+                ],
+                "summary": "Update task by ID",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "taskID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID for the task to be updated."
+                    }
+                ],
+                "operationId": "updateTask",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Task"
+                            }
+                        }
+                    },
+                    "required": true,
+                    "description": "Updated task object"
+                }
+            },
+            "delete": {
+                "tags": [
+                    "task"
+                ],
+                "summary": "Delete task by ID",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "taskID",
+                        "in": "path",
+                        "description": "Identifier for the task to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "operationId": "deleteTask",
+                "responses": {
+                    "404": {
+                        "description": "Task not found"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "200": {
+                        "description": "Task successfully deleted"
+                    }
+                }
+            }
+        },
+        "/task": {
+            "get": {
+                "tags": [
+                    "task"
+                ],
+                "summary": "Get all tasks for current user",
+                "description": "",
+                "operationId": "getUserTasks",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Task"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "task"
+                ],
+                "summary": "Create a new task.",
+                "description": "",
+                "parameters": [],
+                "operationId": "createTask",
+                "responses": {
+                    "200": {
+                        "description": "Successfully created task."
+                    },
+                    "400": {
+                        "description": "Task already exists."
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "*/*": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Task"
+                            }
+                        }
+                    },
+                    "description": "Task to create.",
+                    "required": true
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "userStatus": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "User Status"
+                    }
+                },
+                "xml": {
+                    "name": "User"
+                }
+            },
+            "ApiResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Task": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "dueDate": {
+                        "type": "string"
+                    },
+                    "workDate": {
+                        "type": "string"
+                    },
+                    "owner": {
+                        "type": "string"
+                    },
+                    "calendar": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Calendar": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "owner": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "UserArray": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "format": "int64"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "firstName": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "userStatus": {
+                                        "type": "integer",
+                                        "format": "int32",
+                                        "description": "User Status"
+                                    }
+                                },
+                                "xml": {
+                                    "name": "User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "List of user object",
+                "required": true
+            }
+        },
+        "securitySchemes": {
+            "pyplanner_auth": {
+                "type": "oauth2",
+                "flows": {
+                    "implicit": {
+                        "authorizationUrl": "https://pyplanner.herokuapp.com/oath2/authorize",
+                        "scopes": {
+                            "read": "Read-only access to tasks.",
+                            "modify": "Full read and write access to tasks."
+                        }
+                    }
+                }
+            }
+        },
+        "links": {},
+        "callbacks": {}
+    },
+    "security": []
+}
