@@ -20,6 +20,6 @@ class Task(models.Model):
     description = models.TextField()
     dueDate = models.DateTimeField()
     workDate = models.DateField()
-    status = models.IntegerField(choices=TaskStatus)
+    status = models.IntegerField(choices=TaskStatus.choices)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
