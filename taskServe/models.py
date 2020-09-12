@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 CHAR_FIELD_MAX_LENGTH = 150
 
